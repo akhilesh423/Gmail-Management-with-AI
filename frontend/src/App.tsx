@@ -1,12 +1,12 @@
 import React from 'react';
-import VirtualPet from "./components/VirtualPet"
+import Hero from './components/Hero';
 
 const App: React.FC = () => {
     return (
-        <div>
+        
 
-            <VirtualPet />
-        </div>
+            <Hero/>
+       
     );
 };
 
