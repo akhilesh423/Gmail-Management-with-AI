@@ -25,17 +25,14 @@ const Navbar: React.FC = () => {
               <span className="text-lg font-semibold">Acme AI Email Assistant</span>
             </a>
             <nav className="hidden md:flex items-center gap-4">
-              <a className="text-sm font-medium hover:underline" href="#">
+              <a className="text-md font-medium hover:underline" href="#hero">
                 Home
               </a>
-              <a className="text-sm font-medium hover:underline" href="#">
+              <a className="text-md font-medium hover:underline" href="#benefits">
                 Features
               </a>
-              <a className="text-sm font-medium hover:underline" href="#">
-                Pricing
-              </a>
-              <a className="text-sm font-medium hover:underline" href="#">
-                Contact
+              <a className="text-md font-medium hover:underline" href="#footer">
+                About
               </a>
             </nav>
             <button className="inline-flex text-white bg-black items-center justify-center whitespace-nowrap rounded-md text-sm font-medium px-4 py-2">

@@ -5,4 +5,5 @@
 body{
     font-family: "Inter", Helvetica, arial, sans-serif;
     background-color: #F1F3F4;
+    scroll-behavior: smooth;
 }

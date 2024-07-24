@@ -3,7 +3,7 @@
 
 export default function Benefits(){
     return(
-        <section className="w-full bg-muted py-12 md:py-24 lg:py-32">
+        <section id="benefits" className="w-full bg-muted py-12 md:py-24 lg:py-32">
   <div className="container px-4 md:px-6">
     <div className="space-y-4 text-center py-10">
       <div className="inline-block rounded-lg bg-white px-3 py-1 text-sm">Features & Benefits</div>
