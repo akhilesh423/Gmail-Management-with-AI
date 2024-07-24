@@ -1,8 +1,8 @@
 
 const Hero = () => {
   return (
-    <section id="hero" className="w-full h-svh bg-white py-12 md:py-24 lg:py-32">
-    <div className="container px-4 md:px-6 flex flex-col items-center justify-center">
+    <section id="hero" className="w-full bg-white py-12 md:py-24 lg:py-32">
+    <div className="container h-svh px-4 md:px-6 flex flex-col items-center justify-center">
       <div className="space-y-4 text-center">
         <div className="inline-block rounded-lg bg-gray-200 px-3 py-1 text-sm">AI-Powered Email Management</div>
         <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Take Control of Your Inbox with AI</h1>
