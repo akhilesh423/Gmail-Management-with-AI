@@ -34,7 +34,12 @@ const oauth2callback = async (req, res) => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    res.cookie('id_token', tokens.id_token);
+    // res.cookie('id_token', tokens.id_token);
+    res.cookie('id_token', tokens.id_token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'Lax',
+    });
   
     res.redirect('http://localhost:5173/dashboard');
   } catch (error) {
