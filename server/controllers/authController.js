@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const UserToken = require("../dbSchema/userToken")
 // const { googleClientId, googleClientSecret, googleRedirectUri } = require('../config/config');
 
 // const oauth2Client = new google.auth.OAuth2(
@@ -34,30 +35,65 @@ const oauth2callback = async (req, res) => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    // res.cookie('id_token', tokens.id_token);
+
+    const { id_token, access_token, refresh_token, expiry_date } = tokens;
+    const payload = await oauth2Client.verifyIdToken({
+      idToken: id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const email = payload.getPayload().email;
+
+    await UserToken.findOneAndUpdate(
+      { email },
+      {
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        expiresAt: new Date(expiry_date),
+      },
+      { upsert: true, new: true }
+    );
+
     res.cookie('id_token', tokens.id_token, {
       httpOnly: true,
       secure: true,
     });
-  
+
     res.redirect('http://localhost:5173/dashboard');
   } catch (error) {
     console.error('Error authenticating:', error);
     res.status(500).json({ error: 'Authentication failed' });
   }
 };
+const logout = async (req, res) => {
+  const user = req.user;
 
-const logout = (req, res) => {
-  oauth2Client.revokeCredentials((err) => {
-    if (err) {
-      console.error('Error revoking token:', err);
-      return res.status(500).json({ error: 'Failed to logout' });
+  if (!user || !user.email) {
+    return res.status(400).json({ error: 'No user information found' });
+  }
+
+  try {
+    // Retrieve the user's token from the database
+    const userToken = await UserToken.findOne({ email: user.email });
+
+    if (!userToken) {
+      return res.status(400).json({ error: 'User token not found' });
     }
-    res.clearCookie('access_token');
-    res.json({ message: 'Logged out successfully' });
-  });
-};
 
+    // Revoke the access token
+    await oauth2Client.revokeToken(userToken.accessToken);
+
+    // Clear the user's tokens from the database
+    await UserToken.deleteOne({ email: user.email });
+
+    // Clear the id_token cookie
+    res.clearCookie('id_token');
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Error revoking token:', error);
+    res.status(500).json({ error: 'Failed to logout' });
+  }
+};
 module.exports = {
   auth,
   oauth2callback,

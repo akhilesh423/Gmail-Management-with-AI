@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/login', auth);
 router.get('/oauth2callback', oauth2callback);
-router.get('/logout', logout);
+router.get('/logout',isAuthenticated, logout);
 router.post('/prompt',isAuthenticated,aiResponse)
 
 module.exports = router;

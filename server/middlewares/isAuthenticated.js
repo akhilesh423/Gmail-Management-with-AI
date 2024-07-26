@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const UserToken = require('../routes/authRoutes');
 const oauth2Client = new google.auth.OAuth2();
 
 const isAuthenticated = async (req, res, next) => {
@@ -9,13 +10,17 @@ const isAuthenticated = async (req, res, next) => {
   }
 
   try {
-    oauth2Client.setCredentials({ access_token: token });
     const ticket = await oauth2Client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    console.log(payload)
+    const user = await UserToken.findOne({ email: payload.email });
+   console.log(user)
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
     req.user = payload;
     next();
   } catch (error) {

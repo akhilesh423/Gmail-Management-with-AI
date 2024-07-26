@@ -7,4 +7,5 @@ module.exports = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleRedirectUri: process.env.GOOGLE_REDIRECT_URI,
   geminiApiKey: process.env.GEMINI_API_KEY,
+  mongoURI: process.env.MONGO_URI
 };
