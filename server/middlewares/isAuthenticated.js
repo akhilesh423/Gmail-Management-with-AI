@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const UserToken = require('../routes/authRoutes');
+const UserToken = require('../dbSchema/userToken');
 const oauth2Client = new google.auth.OAuth2();
 
 const isAuthenticated = async (req, res, next) => {

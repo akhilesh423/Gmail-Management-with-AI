@@ -1,7 +1,11 @@
 import React from 'react';
-import "../index.css"
 
 const Navbar: React.FC = () => {
+
+  const handleLogin = async() => {
+    window.location.href = "http://localhost:5000/api/auth/login";
+  };
+  
   return (
     <div className=''>
       <header className="w-full bg-muted py-3 md:py-4 lg:py-5">
@@ -35,7 +39,7 @@ const Navbar: React.FC = () => {
                 About
               </a>
             </nav>
-            <button className="inline-flex text-white bg-black items-center justify-center whitespace-nowrap rounded-md text-sm font-medium px-4 py-2">
+            <button onClick={handleLogin} className="inline-flex text-white bg-black items-center justify-center whitespace-nowrap rounded-md text-sm font-medium px-4 py-2">
               Get Started
             </button>
           </div>

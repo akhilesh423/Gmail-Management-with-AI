@@ -1,10 +1,10 @@
 import React from 'react';
-import './pages/LandingPage'
-import LandingPage from './pages/LandingPage';
+import AppRoutes from './routes/AppRoutes';
+
 const App: React.FC = () => {
     return (
         <>
-        <LandingPage/>
+        <AppRoutes/>
         </>
           
        

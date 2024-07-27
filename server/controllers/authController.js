@@ -12,6 +12,8 @@ const oauth2Client = require("../services/google")
 google.options({ auth: oauth2Client });
 
 const auth = (req, res) => {
+  const query = req.query 
+  console.log(query)
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: [
@@ -54,12 +56,13 @@ const oauth2callback = async (req, res) => {
       { upsert: true, new: true }
     );
 
-    res.cookie('id_token', tokens.id_token, {
-      httpOnly: true,
-      secure: true,
-    });
+    // res.cookie('id_token', tokens.id_token, {
+    //   httpOnly: true,
+    //   secure: true,
+    // });
+    res.cookie("id_token", tokens.id_token)
 
-    res.redirect('http://localhost:5173/dashboard');
+    res.redirect('http://localhost:5173/inbox');
   } catch (error) {
     console.error('Error authenticating:', error);
     res.status(500).json({ error: 'Authentication failed' });

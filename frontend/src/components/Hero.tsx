@@ -1,5 +1,11 @@
-
+// import { Link } from "react-router-dom";
 const Hero = () => {
+
+  const handleLogin = async() => {
+    window.location.href = "http://localhost:5000/api/auth/login";
+  };
+  
+
   return (
     <section id="hero" className="w-full bg-white py-36 md:py-24 lg:py-32">
     <div className="container px-4 md:px-6 flex flex-col items-center justify-center">
@@ -11,10 +17,10 @@ const Hero = () => {
           boost productivity, and improve communication with personalized insights and intelligent features.
         </p>
         <div className="flex gap-4 justify-center">
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-black text-white h-10 px-4 py-2">
+          <button onClick={handleLogin} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-black text-white h-10 px-4 py-2">
             Get Started
           </button>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border h-10 px-4 py-2">
+          <button  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border h-10 px-4 py-2">
             Learn More
           </button>
         </div>
