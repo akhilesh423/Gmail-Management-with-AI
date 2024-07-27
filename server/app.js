@@ -9,7 +9,7 @@ const { port, mongoURI } = require('./config/config');
 const app = express();
 
 app.use(cors({
-  origin: 'https://gmail-management-with-ai.vercel.app/',
+  origin: 'https://gmail-management-with-ai.vercel.app',
   credentials: true,
 }));
 app.use(express.json());
