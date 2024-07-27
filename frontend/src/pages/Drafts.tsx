@@ -37,7 +37,7 @@ export default function Drafts() {
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const response = await axios.get<{ messages: MessageWrapper[] }>('http://localhost:5000/api/emails/drafts', {
+        const response = await axios.get<{ messages: MessageWrapper[] }>('https://gmail-management-with-ai.onrender.com/api/emails/drafts', {
           withCredentials: true,
         });
 

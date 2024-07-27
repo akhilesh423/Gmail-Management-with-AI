@@ -9,10 +9,10 @@ interface AuthNavProps {
 }
 
 const AuthNav: React.FC<AuthNavProps> = ({ userName }) => {
-  const getInitials = (name: string) => {
-    const names = name.split(' ');
-    return names.map(n => n[0].toUpperCase()).join('');
-  };
+//   const getInitials = (name: string) => {
+//     const names = name.split(' ');
+//     return names.map(n => n[0].toUpperCase()).join('');
+//   };
 
   return (
     <div className="flex items-center justify-between border-b h-14 p-3 bg-gray-100">

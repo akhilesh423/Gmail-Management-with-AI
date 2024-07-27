@@ -17,7 +17,7 @@ const Prompt: React.FC = () => {
 
     try {
       // Make API call
-      const response = await axios.post('http://localhost:5000/api/auth/prompt', { prompt: message }, { withCredentials: true });
+      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', { prompt: message }, { withCredentials: true });
       const aiResponse = response.data.text;
 
       // Add AI response to chat

@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/auth/logout", {
+      const response = await axios.get("https://gmail-management-with-ai.onrender.com/api/auth/logout", {
         withCredentials: true
       });
       if (response.status === 200) {

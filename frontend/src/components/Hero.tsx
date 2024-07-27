@@ -2,7 +2,7 @@
 const Hero = () => {
 
   const handleLogin = async() => {
-    window.location.href = "http://localhost:5000/api/auth/login";
+    window.location.href = "https://gmail-management-with-ai.onrender.com/api/auth/login";
   };
   
 

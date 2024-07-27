@@ -32,7 +32,7 @@ export default function Sent() {
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const response = await axios.get<{ messages: Email[] }>('http://localhost:5000/api/emails/sent', {
+        const response = await axios.get<{ messages: Email[] }>('https://gmail-management-with-ai.onrender.com/api/emails/sent', {
           withCredentials: true,
         });
 

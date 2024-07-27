@@ -32,7 +32,7 @@ export default function Inbox() {
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const response = await axios.get<{ messages: Email[] }>('http://localhost:5000/api/emails/inbox', {
+        const response = await axios.get<{ messages: Email[] }>('https://gmail-management-with-ai.onrender.com/api/emails/inbox', {
           withCredentials: true,
         });
 
