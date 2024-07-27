@@ -62,7 +62,7 @@ const oauth2callback = async (req, res) => {
     // });
     res.cookie("id_token", tokens.id_token)
 
-    res.redirect('http://localhost:5173/inbox');
+    res.redirect('https://gmail-management-with-ai.vercel.app/inbox');
   } catch (error) {
     console.error('Error authenticating:', error);
     res.status(500).json({ error: 'Authentication failed' });
