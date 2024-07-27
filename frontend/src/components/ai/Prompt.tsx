@@ -10,17 +10,15 @@ const Prompt: React.FC = () => {
   const handleSend = async () => {
     if (message.trim() === '') return;
 
-    // Add user message to chat
+
     setChat([...chat, { from: 'user', content: message }]);
     setMessage('');
     setLoading(true);
 
     try {
-      // Make API call
       const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', { prompt: message }, { withCredentials: true });
       const aiResponse = response.data.text;
 
-      // Add AI response to chat
       setChat([...chat, { from: 'user', content: message }, { from: 'ai', content: aiResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);

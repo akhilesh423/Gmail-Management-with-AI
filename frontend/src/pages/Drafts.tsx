@@ -41,7 +41,6 @@ export default function Drafts() {
           withCredentials: true,
         });
 
-        // Extract the email data from the message object of each draft
         const emails = response.data.messages.map(wrapper => wrapper.message);
         setEmails(emails || []);
         setLoading(false);

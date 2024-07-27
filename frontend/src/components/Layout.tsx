@@ -1,6 +1,5 @@
 import React from 'react';
 import Sidebar from "./auth/Sidebar";
-// import AuthNav from "./auth/AuthNav";
 import Prompt from './ai/Prompt';
 
 interface LayoutProps {

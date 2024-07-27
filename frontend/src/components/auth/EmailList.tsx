@@ -37,7 +37,6 @@ const EmailList: React.FC<EmailListProps> = ({ emails, loading, error, fromField
   };
 
   const handleEmailClick = (email: Email) => {
-    // Logic to show email details can go here, e.g., navigate to a detail page or open a modal
     alert(`Show details for email with ID: ${email.id}`);
   };
 
@@ -102,7 +101,7 @@ const EmailList: React.FC<EmailListProps> = ({ emails, loading, error, fromField
         <p>No emails found.</p>
       )}
 
-      {/* Pagination Controls */}
+
       <div className="flex justify-between items-center mt-4">
         <button
           className="p-2 border rounded-md bg-gray-200 hover:bg-gray-300"
