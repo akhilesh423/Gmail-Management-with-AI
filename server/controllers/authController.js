@@ -56,11 +56,11 @@ const oauth2callback = async (req, res) => {
       { upsert: true, new: true }
     );
 
-    // res.cookie('id_token', tokens.id_token, {
-    //   httpOnly: true,
-    //   secure: true,
-    // });
-    res.cookie("id_token", tokens.id_token)
+    res.cookie('id_token', tokens.id_token, {
+      httpOnly: true,
+      secure: true,
+    });
+    // res.cookie("id_token", tokens.id_token)
 
     res.redirect('https://gmail-management-with-ai.vercel.app/inbox');
   } catch (error) {
