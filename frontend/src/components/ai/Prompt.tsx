@@ -51,6 +51,7 @@ const Prompt: React.FC = () => {
       await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/sendEmail', 
       { subject, recipientEmail, body: generatedEmail }, { withCredentials: true });
       setChat([...chat, { from: 'user', content: `Email sent to ${recipientEmail}` }]);
+      setSubject("")
     } catch (error) {
       console.error('Error sending email:', error);
       setChat([...chat, { from: 'user', content: 'Error: Could not send email' }]);
