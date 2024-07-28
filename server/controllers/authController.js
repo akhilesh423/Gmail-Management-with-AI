@@ -59,6 +59,7 @@ const oauth2callback = async (req, res) => {
     res.cookie('id_token', tokens.id_token, {
       httpOnly: true,
       secure: true,
+      sameSite: 'None'
     });
     // res.cookie("id_token", tokens.id_token)
 
