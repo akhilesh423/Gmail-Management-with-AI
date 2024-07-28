@@ -48,7 +48,7 @@ const Prompt: React.FC = () => {
     if (recipientEmail.trim() === '') return;
 
     try {
-      await axios.post('https://gmail-management-with-ai.onrender.com/api/send-email', 
+      await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/sendEmail', 
       { subject, recipientEmail, body: generatedEmail }, { withCredentials: true });
       setChat([...chat, { from: 'user', content: `Email sent to ${recipientEmail}` }]);
     } catch (error) {
