@@ -26,7 +26,8 @@ const Navbar: React.FC = () => {
               >
                 <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
               </svg>
-              <span className="text-lg font-semibold">Acme AI Email Assistant</span>
+              <span className="text-lg font-semibold">MailMaster AI</span>
+
             </a>
             <nav className="hidden md:flex items-center gap-4">
               <a className="text-md font-medium hover:underline" href="#hero">

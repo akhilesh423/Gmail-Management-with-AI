@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className="bg-white border-gray-300 border-r h-screen flex flex-col">
       <div className='border-b h-14 text-center flex items-center justify-center bg-gray-100'>
-        <h1 className="text-lg font-bold">Email X AI</h1>
+        <h1 className="text-lg font-bold">MailMaster</h1>
       </div>
 
       <div className='flex flex-col justify-between grow p-1'>
