@@ -16,7 +16,7 @@ const Prompt: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/generate', 
+      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', 
       { subject }, { withCredentials: true });
       const aiMessage = response.data.text;
 
