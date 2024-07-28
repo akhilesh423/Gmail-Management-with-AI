@@ -9,6 +9,7 @@ const Prompt: React.FC = () => {
   const [chat, setChat] = useState<{ from: string, content: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [awaitingApproval, setAwaitingApproval] = useState(false);
+  const [awaitingRecipient, setAwaitingRecipient] = useState(false);
   const [generatedEmail, setGeneratedEmail] = useState('');
 
   const handleSend = async () => {
@@ -36,16 +37,26 @@ const Prompt: React.FC = () => {
 
   const handleApproval = async (approve: boolean) => {
     if (approve) {
-      try {
-        await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/sendEmail', 
-        { subject, recipientEmail, body: generatedEmail }, { withCredentials: true });
-        setChat([...chat, { from: 'user', content: `Email sent to ${recipientEmail}` }]);
-      } catch (error) {
-        console.error('Error sending email:', error);
-        setChat([...chat, { from: 'user', content: 'Error: Could not send email' }]);
-      }
+      setAwaitingRecipient(true);
+    } else {
+      setAwaitingApproval(false);
+      setGeneratedEmail('');
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (recipientEmail.trim() === '') return;
+
+    try {
+      await axios.post('https://gmail-management-with-ai.onrender.com/api/send-email', 
+      { subject, recipientEmail, body: generatedEmail }, { withCredentials: true });
+      setChat([...chat, { from: 'user', content: `Email sent to ${recipientEmail}` }]);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setChat([...chat, { from: 'user', content: 'Error: Could not send email' }]);
     }
     setAwaitingApproval(false);
+    setAwaitingRecipient(false);
     setGeneratedEmail('');
     setRecipientEmail('');
   };
@@ -92,12 +103,31 @@ const Prompt: React.FC = () => {
           className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
           placeholder="Subject"
         />
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          placeholder="Message (optional)"
-        />
+        {awaitingRecipient && (
+          <>
+            <input
+              type="email"
+              value={recipientEmail}
+              onChange={(e) => setRecipientEmail(e.target.value)}
+              className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+              placeholder="Recipient Email"
+            />
+            <button
+              onClick={handleSendEmail}
+              className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
+            >
+              <FaArrowUp size={20} />
+            </button>
+          </>
+        )}
+        {!awaitingRecipient && !awaitingApproval && (
+          <button
+            onClick={handleSend}
+            className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
+          >
+            <FaArrowUp size={20} />
+          </button>
+        )}
         {awaitingApproval && (
           <div className="flex flex-col space-y-2">
             <p>Do you want to send this email?</p>
@@ -114,14 +144,6 @@ const Prompt: React.FC = () => {
               No
             </button>
           </div>
-        )}
-        {!awaitingApproval && (
-          <button
-            onClick={handleSend}
-            className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
-          >
-            <FaArrowUp size={20} />
-          </button>
         )}
       </div>
     </div>
