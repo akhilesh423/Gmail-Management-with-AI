@@ -10,14 +10,14 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-const { prompt } = req.body;
+const { subject } = req.body;
 
   if (!prompt) {
     return res.status(400).json({ error: 'Prompt is required' });
   }
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(subject);
     const response = await result.response;
     const text = await response.text();
     res.json({ text });
