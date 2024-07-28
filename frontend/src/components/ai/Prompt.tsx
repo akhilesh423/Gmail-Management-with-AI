@@ -18,7 +18,7 @@ const Prompt: React.FC = () => {
 
     try {
       const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/send', 
-      { subject, recipientEmail }, { withCredentials: true });
+      { subject, recipientEmail,message }, { withCredentials: true });
       const aiResponse = response.data.text;
 
       setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: aiResponse }]);
