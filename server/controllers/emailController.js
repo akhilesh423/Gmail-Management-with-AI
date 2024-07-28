@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const oauth2Client = require("../services/google")
+const generateAIContent = require("../controllers/aiResponse")
 
 google.options({ auth: oauth2Client });
 
@@ -191,15 +192,19 @@ const getDrafts = async (req, res) => {
 
 
 const sendEmail = async (req, res) => {
-  const { subject, message } = req.body;
-  if (!subject || !message) {
-    return res.status(400).json({ error: 'Both subject and message are required' });
+  const { subject, recipientEmail } = req.body;
+
+  if (!subject || !recipientEmail) {
+    return res.status(400).json({ error: 'Subject and recipient email are required' });
   }
 
   try {
+    // Generate AI content
+    const message = await generateAIContent(subject);
+
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
     const email = [
-      `To: recipient@example.com`,
+      `To: ${recipientEmail}`,
       'Content-Type: text/html; charset=utf-8',
       'MIME-Version: 1.0',
       `Subject: ${subject}`,
@@ -226,6 +231,7 @@ const sendEmail = async (req, res) => {
     res.status(500).json({ error: 'Failed to send email' });
   }
 };
+
 
 
 module.exports = { getInboxEmails,getSentEmails,getDrafts,sendEmail}
