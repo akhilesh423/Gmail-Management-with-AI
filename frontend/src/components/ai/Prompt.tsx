@@ -4,24 +4,27 @@ import { FaArrowUp } from 'react-icons/fa';
 
 const Prompt: React.FC = () => {
   const [message, setMessage] = useState('');
+  const [subject, setSubject] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
   const [chat, setChat] = useState<{ from: string, content: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
-    if (message.trim() === '') return;
+    if (subject.trim() === '' || recipientEmail.trim() === '') return;
 
-    setChat([...chat, { from: 'user', content: message }]);
+    setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }]);
     setMessage('');
     setLoading(true);
 
     try {
-      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', { prompt: message }, { withCredentials: true });
+      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/send', 
+      { subject, recipientEmail }, { withCredentials: true });
       const aiResponse = response.data.text;
 
-      setChat([...chat, { from: 'user', content: message }, { from: 'ai', content: aiResponse }]);
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: aiResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);
-      setChat([...chat, { from: 'user', content: message }, { from: 'ai', content: 'Error: Could not get response' }]);
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: 'Error: Could not get response' }]);
     } finally {
       setLoading(false);
     }
@@ -36,7 +39,7 @@ const Prompt: React.FC = () => {
               <div className="text-center">
                 <p className="text-gray-500 italic mb-4">Generate the emails with AI</p>
                 <div className="border border-gray-300 p-4 rounded-lg shadow-md bg-gray-100">
-                  <p className="text-gray-700">Write an email to a friend.</p>
+                  <p className="text-gray-700">Enter a subject and recipient email to generate an email message.</p>
                 </div>
               </div>
             </div>
@@ -61,18 +64,24 @@ const Prompt: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="flex items-center pt-2">
-        <textarea
-          rows={1}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="flex-1 p-2 border rounded-lg resize-none overflow-hidden bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          placeholder="Type your message..."
-          style={{ height: 'auto', minHeight: '3rem' }}
+      <div className="flex flex-col space-y-2">
+        <input
+          type="text"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+          placeholder="Subject"
+        />
+        <input
+          type="email"
+          value={recipientEmail}
+          onChange={(e) => setRecipientEmail(e.target.value)}
+          className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+          placeholder="Recipient Email"
         />
         <button
           onClick={handleSend}
-          className="ml-2 p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
+          className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
         >
           <FaArrowUp size={20} />
         </button>
