@@ -39,7 +39,7 @@ const Prompt: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/email/send', 
+      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/email/sendEmail', 
       { subject, recipientEmail, message: chat.find(msg => msg.from === 'ai')?.content }, { withCredentials: true });
       if(response){
         console.log("email sent")
