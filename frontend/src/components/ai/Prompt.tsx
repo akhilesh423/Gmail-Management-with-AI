@@ -10,7 +10,6 @@ const Prompt: React.FC = () => {
   const handleSend = async () => {
     if (message.trim() === '') return;
 
-
     setChat([...chat, { from: 'user', content: message }]);
     setMessage('');
     setLoading(true);
@@ -34,7 +33,12 @@ const Prompt: React.FC = () => {
         <div className="flex flex-col space-y-3">
           {chat.length === 0 ? (
             <div className="flex justify-center items-center h-full">
-              <p className="text-gray-500 italic">Generate the emails with AI</p>
+              <div className="text-center">
+                <p className="text-gray-500 italic mb-4">Generate the emails with AI</p>
+                <div className="border border-gray-300 p-4 rounded-lg shadow-md bg-gray-100">
+                  <p className="text-gray-700">Write an email to a friend.</p>
+                </div>
+              </div>
             </div>
           ) : (
             chat.map((msg, index) => (
