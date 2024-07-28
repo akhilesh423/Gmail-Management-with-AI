@@ -11,7 +11,7 @@ const aiResponse = async (req, res) => {
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   const { subject, emailBody } = req.body;
 
-  if (!subject || !emailBody) {
+  if (!subject) {
     return res.status(400).json({ error: 'Subject and email body are required' });
   }
 
