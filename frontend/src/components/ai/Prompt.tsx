@@ -8,27 +8,46 @@ const Prompt: React.FC = () => {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [chat, setChat] = useState<{ from: string, content: string }[]>([]);
   const [loading, setLoading] = useState(false);
+  const [awaitingApproval, setAwaitingApproval] = useState(false);
+  const [generatedEmail, setGeneratedEmail] = useState('');
 
   const handleSend = async () => {
-    if (subject.trim() === '' || recipientEmail.trim() === '') return;
+    if (subject.trim() === '') return;
 
-    setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }]);
+    setChat([...chat, { from: 'user', content: `Subject: ${subject}` }]);
     setMessage('');
     setLoading(true);
 
     try {
-      const emailBody = recipientEmail
       const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', 
-      { subject,emailBody}, { withCredentials: true });
+      { subject, emailBody: message }, { withCredentials: true });
       const aiResponse = response.data.text;
-      console.log(message)
-      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: aiResponse }]);
+
+      setGeneratedEmail(aiResponse);
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}` }, { from: 'ai', content: aiResponse }]);
+      setAwaitingApproval(true);
     } catch (error) {
-      console.error('Error sending message:', error);
-      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: 'Error: Could not get response' }]);
+      console.error('Error generating email:', error);
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}` }, { from: 'ai', content: 'Error: Could not get response' }]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleApproval = async (approve: boolean) => {
+    if (approve) {
+      try {
+        await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/sendEmail', 
+        { subject, recipientEmail, body: generatedEmail }, { withCredentials: true });
+        setChat([...chat, { from: 'user', content: `Email sent to ${recipientEmail}` }]);
+      } catch (error) {
+        console.error('Error sending email:', error);
+        setChat([...chat, { from: 'user', content: 'Error: Could not send email' }]);
+      }
+    }
+    setAwaitingApproval(false);
+    setGeneratedEmail('');
+    setRecipientEmail('');
   };
 
   return (
@@ -40,7 +59,7 @@ const Prompt: React.FC = () => {
               <div className="text-center">
                 <p className="text-gray-500 italic mb-4">Generate the emails with AI</p>
                 <div className="border border-gray-300 p-4 rounded-lg shadow-md bg-gray-100">
-                  <p className="text-gray-700">Enter a subject and recipient email to generate an email message.</p>
+                  <p className="text-gray-700">Enter a subject to generate an email message.</p>
                 </div>
               </div>
             </div>
@@ -73,19 +92,37 @@ const Prompt: React.FC = () => {
           className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
           placeholder="Subject"
         />
-        <input
-          type="email"
-          value={recipientEmail}
-          onChange={(e) => setRecipientEmail(e.target.value)}
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           className="p-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          placeholder="Recipient Email"
+          placeholder="Message (optional)"
         />
-        <button
-          onClick={handleSend}
-          className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
-        >
-          <FaArrowUp size={20} />
-        </button>
+        {awaitingApproval && (
+          <div className="flex flex-col space-y-2">
+            <p>Do you want to send this email?</p>
+            <button
+              onClick={() => handleApproval(true)}
+              className="p-2 bg-green-500 text-white rounded-full hover:bg-green-700 flex items-center justify-center transition-all duration-300"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => handleApproval(false)}
+              className="p-2 bg-red-500 text-white rounded-full hover:bg-red-700 flex items-center justify-center transition-all duration-300"
+            >
+              No
+            </button>
+          </div>
+        )}
+        {!awaitingApproval && (
+          <button
+            onClick={handleSend}
+            className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
+          >
+            <FaArrowUp size={20} />
+          </button>
+        )}
       </div>
     </div>
   );
