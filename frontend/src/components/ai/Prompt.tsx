@@ -3,43 +3,28 @@ import axios from 'axios';
 import { FaArrowUp } from 'react-icons/fa';
 
 const Prompt: React.FC = () => {
+  const [message, setMessage] = useState('');
   const [subject, setSubject] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
-  const [generatedMessage, setGeneratedMessage] = useState('');
   const [chat, setChat] = useState<{ from: string, content: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  // const [confirmed, setConfirmed] = useState(false);
-
-  const handleGenerate = async () => {
-    if (subject.trim() === '' || recipientEmail.trim() === '') return;
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/auth/prompt', 
-      { subject }, { withCredentials: true });
-      const aiMessage = response.data.text;
-
-      setGeneratedMessage(aiMessage);
-      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: aiMessage }]);
-    } catch (error) {
-      console.error('Error generating message:', error);
-      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: 'Error: Could not generate message' }]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSend = async () => {
+    if (subject.trim() === '' || recipientEmail.trim() === '') return;
+
+    setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }]);
+    setMessage('');
     setLoading(true);
 
     try {
-      await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/send', 
-      { subject, recipientEmail, message: generatedMessage }, { withCredentials: true });
-      setChat([...chat, { from: 'user', content: 'Email sent successfully' }]);
+      const response = await axios.post('https://gmail-management-with-ai.onrender.com/api/emails/send', 
+      { subject, recipientEmail,message }, { withCredentials: true });
+      const aiResponse = response.data.text;
+
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: aiResponse }]);
     } catch (error) {
-      console.error('Error sending email:', error);
-      setChat([...chat, { from: 'user', content: 'Error: Could not send email' }]);
+      console.error('Error sending message:', error);
+      setChat([...chat, { from: 'user', content: `Subject: ${subject}\nTo: ${recipientEmail}` }, { from: 'ai', content: 'Error: Could not get response' }]);
     } finally {
       setLoading(false);
     }
@@ -95,23 +80,11 @@ const Prompt: React.FC = () => {
           placeholder="Recipient Email"
         />
         <button
-          onClick={handleGenerate}
+          onClick={handleSend}
           className="p-2 bg-black text-white rounded-full hover:bg-gray-800 flex items-center justify-center transition-all duration-300"
         >
           <FaArrowUp size={20} />
         </button>
-        {generatedMessage && (
-          <div className="mt-4 p-4 border rounded-lg bg-gray-50">
-            <h3 className="text-lg font-semibold">Generated Email</h3>
-            <p className="mt-2 whitespace-pre-line">{generatedMessage}</p>
-            <button
-              onClick={handleSend}
-              className="mt-4 p-2 bg-green-500 text-white rounded-full hover:bg-green-700 transition-all duration-300"
-            >
-              Send Email
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
