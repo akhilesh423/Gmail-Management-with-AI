@@ -12,7 +12,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 const { subject } = req.body;
 
-  if (!prompt) {
+  if (!subject) {
     return res.status(400).json({ error: 'Prompt is required' });
   }
 
