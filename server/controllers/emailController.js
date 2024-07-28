@@ -192,15 +192,15 @@ const getDrafts = async (req, res) => {
 
 
 const sendEmail = async (req, res) => {
-  const { subject, recipientEmail } = req.body;
+  const { subject, recipientEmail, body} = req.body;
 
-  if (!subject || !recipientEmail) {
+  if (!subject || !recipientEmail || !body) {
     return res.status(400).json({ error: 'Subject and recipient email are required' });
   }
 
   try {
     // Generate AI content
-    const message = await generateAIContent(subject);
+    // const message = await generateAIContent(subject);
 
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
     const email = [
@@ -209,7 +209,7 @@ const sendEmail = async (req, res) => {
       'MIME-Version: 1.0',
       `Subject: ${subject}`,
       '',
-      message,
+      body,
     ].join('\n');
 
     const encodedEmail = Buffer.from(email)
